@@ -125,28 +125,28 @@ namespace altClothTool.App
 
             if(IsComponent())
             {
-                for (int i = 0; ; ++i)
+                for (int i = 0; i < 26; ++i)
                 {
                     string relPath = rootPath + "\\" + ClothNameResolver.DrawableTypeToString(DrawableType) + "_diff_" + _origNumerics + "_" + (char)(_offsetLetter + i) + "_uni.ytd";
                     if (!File.Exists(relPath))
-                        break;
+                        continue;
                     Textures.Add(relPath);
                 }
-                for (int i = 0; ; ++i)
+                for (int i = 0; i < 26; ++i)
                 {
                     string relPath = rootPath + "\\" + ClothNameResolver.DrawableTypeToString(DrawableType) + "_diff_" + _origNumerics + "_" + (char)(_offsetLetter + i) + "_whi.ytd";
                     if (!File.Exists(relPath))
-                        break;
+                        continue;
                     Textures.Add(relPath);
                 }
             }
             else
             {
-                for (int i = 0; ; ++i)
+                for (int i = 0; i < 26; ++i)
                 {
                     string relPath = rootPath + "\\" + ClothNameResolver.DrawableTypeToString(DrawableType) + "_diff_" + _origNumerics + "_" + (char)(_offsetLetter + i) + ".ytd";
                     if (!File.Exists(relPath))
-                        break;
+                        continue;
                     Textures.Add(relPath);
                 }
             }
