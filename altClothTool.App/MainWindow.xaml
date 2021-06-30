@@ -37,6 +37,7 @@
                     <Menu VerticalAlignment="Bottom" Height="18">
                         <MenuItem x:Name="addMaleClothes" Header="Male" Click="AddMaleClothes_Click"/>
                         <MenuItem x:Name="addFemaleClothes" Header="Female" Click="AddFemaleClothes_Click"/>
+                        <MenuItem x:Name="addFolderClothes" Header="Folder" Click="AddFolderClothes_Click"/>
                         <MenuItem x:Name="removeUnderCursor" Header="Remove" Click="RemoveUnderCursor_Click"/>
                     </Menu>
                 </Grid>
@@ -127,6 +128,7 @@
                 <MenuItem Header="New"  Click="NewProjectButton_Click"/>
                 <MenuItem Header="Open" Click="OpenProjectButton_Click"/>
                 <MenuItem Header="Save" Click="SaveProjectButton_Click"/>
+                <MenuItem Header="Fix stale YTDs" Click="FixStaleYtdsButton_Click"/>
             </MenuItem>
         </Menu>
     </Grid>

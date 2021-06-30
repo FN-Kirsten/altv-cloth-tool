@@ -1,14 +1,18 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
+using Ookii.Dialogs.Wpf;
 using static altClothTool.App.ClothData;
 
 namespace altClothTool.App
 {
     public partial class MainWindow : Window
     {
+        public const string GTAV_DLCS_PATH = @"F:\Lié à FiveM et GTA V\vanilla_clothes_dlcs";
         private static TextBlock _statusTextBlock;
         private static ProgressBar _statusProgress;
         private static ClothData _selectedCloth;
@@ -44,12 +48,17 @@ namespace altClothTool.App
 
         private void AddMaleClothes_Click(object sender, RoutedEventArgs e)
         {
-            ClothesManager.Instance().AddClothes(Sex.Male);
+            ClothesManager.Instance().AddClothesDialog(Sex.Male);
         }
 
         private void AddFemaleClothes_Click(object sender, RoutedEventArgs e)
         {
-            ClothesManager.Instance().AddClothes(Sex.Female);
+            ClothesManager.Instance().AddClothesDialog(Sex.Female);
+        }
+
+        private void AddFolderClothes_Click(object sender, RoutedEventArgs e)
+        {
+            ClothesManager.Instance().AddClothesFolderDialog();
         }
 
         private void RemoveUnderCursor_Click(object sender, RoutedEventArgs e)
@@ -166,6 +175,56 @@ namespace altClothTool.App
             foreach (string filename in saveFileDialog.FileNames)
             {
                 ProjectManager.SaveProject(filename);
+            }
+        }
+        private void FixStaleYtdsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Dictionary<ClothData.Sex, List<string>> foundYddsSex = new Dictionary<ClothData.Sex, List<string>>();
+            foundYddsSex.Add(Sex.Male, new List<string>());
+            foundYddsSex.Add(Sex.Female, new List<string>());
+
+            foreach (string staleYtdPath in ClothesManager.StaleYtds)
+            {
+                string dlc = Path.GetDirectoryName(staleYtdPath).Split('\\').Last();
+                string ytdName = Path.GetFileNameWithoutExtension(staleYtdPath);
+                ClothData.Sex sex = dlc.StartsWith("mp_m") ? ClothData.Sex.Male : ClothData.Sex.Female;
+
+                string yddPath = FindYddFromStaleYtd(dlc, ytdName);
+
+                if (yddPath != null)
+                {
+                    string ytdParentFolder = Directory.GetParent(staleYtdPath).ToString();
+                    string yddCopyPath = Path.Combine(ytdParentFolder, Path.GetFileName(yddPath));
+
+                    // Prevent duplicating YDD entries in found YDDs + don't copy the YDD again in case we already processed it
+                    if (!File.Exists(yddCopyPath))
+                    {
+                        File.Copy(yddPath, yddCopyPath);
+                        foundYddsSex[sex].Add(yddCopyPath);
+                    }
+                }
+            }
+
+            foreach (KeyValuePair<ClothData.Sex, List<string>> kp in foundYddsSex)
+            {
+                ClothesManager.Instance().AddClothes(kp.Key, kp.Value.ToArray());
+            }
+        }
+
+        private string FindYddFromStaleYtd(string dlc, string ytdName)
+        {
+            string[] yddParts = ytdName.Split('_');
+            string postfix = yddParts[0] != "p" ? yddParts[4].Split('.')[0] == "uni" ? "u" : "r" : "";
+            string ydd = yddParts[0] == "p" ? $"p_{yddParts[1]}_{yddParts[3]}.ydd" : yddParts[0] + "_" + yddParts[2] + "_" + postfix + ".ydd";
+            string path = $"{GTAV_DLCS_PATH}\\{dlc}\\{ydd}";
+
+            if (File.Exists(path))
+            {
+                return path;
+            } else
+            {
+                System.Console.WriteLine($"[WARN] Stale YDD in {path} doesn't exist");
+                return null;
             }
         }
 
