@@ -20,14 +20,21 @@ namespace altClothTool.App.Builders
         protected override void CopyPropTextureToResource(string propTextureFilePath, int sexNr, string outputFolder, string collectionName,
             string componentNumerics, string prefix, char offsetLetter)
         {
-            string targetFilePath = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_p_{Prefixes[sexNr]}{collectionName}\\{Prefixes[sexNr]}freemode_01_p_{Prefixes[sexNr]}{collectionName}^{prefix}_diff_{componentNumerics}_{offsetLetter}.ytd";
+            string targetFilePath = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_p_{Prefixes[sexNr]}{collectionName}\\{prefix}\\{Prefixes[sexNr]}freemode_01_p_{Prefixes[sexNr]}{collectionName}^{prefix}_diff_{componentNumerics}_{offsetLetter}.ytd";
             File.Copy(propTextureFilePath, targetFilePath, true);
         }
 
         protected override void CopyPropModelToResource(ClothData propClothData, int sexNr, string outputFolder, string collectionName,
             string componentNumerics, string prefix)
         {
-            string targetFilePath = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_p_{Prefixes[sexNr]}{collectionName}\\{Prefixes[sexNr]}freemode_01_p_{Prefixes[sexNr]}{collectionName}^{prefix}_{componentNumerics}.ydd";
+            string drawableTypeFolder = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_p_{Prefixes[sexNr]}{collectionName}\\{prefix}";
+
+            if (!Directory.Exists(drawableTypeFolder))
+            {
+                Directory.CreateDirectory(drawableTypeFolder);
+            }
+
+            string targetFilePath = $"{drawableTypeFolder}\\{Prefixes[sexNr]}freemode_01_p_{Prefixes[sexNr]}{collectionName}^{prefix}_{componentNumerics}.ydd";
             File.Copy(propClothData.MainPath, targetFilePath, true);
         }
 
@@ -49,21 +56,28 @@ namespace altClothTool.App.Builders
         protected override void CopyClothFirstPersonModelToResource(string clothDataFirstPersonModelPath, int sexNr, string outputFolder,
             string collectionName, string componentNumerics, string prefix, string yddPostfix)
         {
-            string targetFilePath = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}^{prefix}_{componentNumerics}_{yddPostfix}_1.ydd";
+            string targetFilePath = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}\\{prefix}\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}^{prefix}_{componentNumerics}_{yddPostfix}_1.ydd";
             File.Copy(clothDataFirstPersonModelPath, targetFilePath, true);
         }
 
         protected override void CopyClothTextureToResource(string clothTextureFilePath, int sexNr, string outputFolder, string collectionName,
             string componentNumerics, string prefix, string ytdPostfix, char offsetLetter)
         {
-            string targetFilePath = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}^{prefix}_diff_{componentNumerics}_{offsetLetter}_{ytdPostfix}.ytd";
+            string targetFilePath = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}\\{prefix}\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}^{prefix}_diff_{componentNumerics}_{offsetLetter}_{ytdPostfix}.ytd";
             File.Copy(clothTextureFilePath, targetFilePath, true);
         }
 
         protected override void CopyClothModelToResource(ClothData clothData, int sexNr, string outputFolder, string collectionName,
             string componentNumerics, string prefix, string yddPostfix)
         {
-            string targetFilePath = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}^{prefix}_{componentNumerics}_{yddPostfix}.ydd";
+            string drawableTypeFolder = $"{outputFolder}\\stream\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}\\{prefix}";
+
+            if (!Directory.Exists(drawableTypeFolder))
+            {
+                Directory.CreateDirectory(drawableTypeFolder);
+            }
+
+            string targetFilePath = $"{drawableTypeFolder}\\{Prefixes[sexNr]}freemode_01_{Prefixes[sexNr]}{collectionName}^{prefix}_{componentNumerics}_{yddPostfix}.ydd";
             File.Copy(clothData.MainPath, targetFilePath, true);
         }
 
